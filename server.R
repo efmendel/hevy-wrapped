@@ -1,87 +1,10 @@
-# HEVY WRAPPED - SIMPLE VERSION
-# Copy this entire file into RStudio and click "Run App"
+# server.R - Simple Hevy Wrapped Server
 
-# Step 1: Install packages (run these lines once in your R console)
-# install.packages("shiny")
-# install.packages("dplyr")
-# install.packages("ggplot2")
-# install.packages("lubridate")
-# install.packages("readr")
-
-# Step 2: Load packages
 library(shiny)
 library(dplyr)
 library(ggplot2)
 library(lubridate)
 library(readr)
-
-# ============================================================================
-# USER INTERFACE (what the user sees)
-# ============================================================================
-
-ui <- fluidPage(
-  # App title
-  titlePanel("🏋️ Hevy Wrapped - Your Fitness Year in Review"),
-  
-  # Sidebar for file upload
-  sidebarLayout(
-    sidebarPanel(
-      h3("Upload Your Data"),
-      p("Export your workout data from Hevy app and upload the CSV here."),
-      
-      # File input
-      fileInput("file", "Choose CSV File",
-                accept = c("text/csv", ".csv")),
-      
-      hr(),
-      
-      # Action button
-      actionButton("analyze", "Analyze My Workouts!", 
-                   class = "btn-primary btn-lg")
-    ),
-    
-    # Main panel for outputs
-    mainPanel(
-      # Summary stats
-      h3("Your Stats"),
-      fluidRow(
-        column(4, 
-               wellPanel(
-                 h4("Total Workouts"),
-                 textOutput("total_workouts")
-               )
-        ),
-        column(4,
-               wellPanel(
-                 h4("Total Volume"),
-                 textOutput("total_volume")
-               )
-        ),
-        column(4,
-               wellPanel(
-                 h4("Favorite Exercise"),
-                 textOutput("top_exercise")
-               )
-        )
-      ),
-      
-      hr(),
-      
-      # Charts
-      h3("Your Progress"),
-      plotOutput("workout_trend", height = "300px"),
-      
-      hr(),
-      
-      h3("Top 10 Exercises by Volume"),
-      plotOutput("top_exercises_plot", height = "400px")
-    )
-  )
-)
-
-# ============================================================================
-# SERVER (what happens behind the scenes)
-# ============================================================================
 
 server <- function(input, output, session) {
   
@@ -186,9 +109,3 @@ server <- function(input, output, session) {
       )
   })
 }
-
-# ============================================================================
-# RUN THE APP
-# ============================================================================
-
-shinyApp(ui = ui, server = server)
