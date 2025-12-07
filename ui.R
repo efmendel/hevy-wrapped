@@ -5,7 +5,7 @@ ui <- navbarPage(
   title = "🏋️ Hevy Wrapped",
   theme = shinytheme("flatly"),
   
-  # ---- TAB 1: INTRO ----
+  # tab 1: intro
   tabPanel("Intro",
            fluidPage(
              column(width = 10, offset = 1, align = "center",
@@ -14,7 +14,7 @@ ui <- navbarPage(
                     h4("Upload your Hevy data to see your gym story.", style = "color: #7f8c8d;"),
                     br(), hr(),
                     
-                    # Instructions
+                    # instructions
                     h4("How to get your Hevy workout data:"),
                     br(),
                     fluidRow(
@@ -33,7 +33,7 @@ ui <- navbarPage(
                     ),
                     hr(), br(),
                     
-                    # Upload Box
+                    # upload box
                     column(width = 6, offset = 3,
                            wellPanel(
                              style = "background-color: #f8f9fa; border-color: #e9ecef; padding: 30px;",
@@ -51,7 +51,7 @@ ui <- navbarPage(
            )
   ),
   
-  # ---- TAB 2: FITNESS LIFE IN REVIEW ----
+  # tab 2: fitness life in review
   tabPanel("Fitness Life in Review",
            fluidPage(
              br(),
@@ -78,12 +78,12 @@ ui <- navbarPage(
            )
   ),
   
-  # ---- TAB 3: STRENGTH & GAINS (Updated with New Graphs) ----
+  # tab 3: strengths and gains
   tabPanel("Strength & Gains",
            fluidPage(
              br(),
              
-             # NEW: Most/Least Improved
+             # improvement chart
              h3("Gains Analysis"),
              p("Percentage improvement in max weight lifted (First Month vs Last Month)."),
              fluidRow(
@@ -97,11 +97,11 @@ ui <- navbarPage(
              
              hr(),
              
-             # Existing 1RM Chart
+             # 1rm chart
              h3("Exercise Deep Dive"),
              wellPanel(
                fluidRow(
-                 column(6, uiOutput("exercise_select_ui")), # Dynamic Dropdown
+                 column(6, uiOutput("exercise_select_ui")),
                  column(3, h4("Max 1RM Ever:"), textOutput("max_1rm")),
                  column(3, h4("Failure Rate:"), textOutput("failure_rate"))
                )
@@ -112,7 +112,7 @@ ui <- navbarPage(
                         br(),
                         plotOutput("progression_chart", height = "400px")),
                
-               # NEW: Custom Scatter Plot
+               # exercise specific scatter plot
                tabPanel("Weight & Reps Scatter", 
                         br(),
                         p("Bubble size represents number of reps performed."),
@@ -121,6 +121,7 @@ ui <- navbarPage(
              
              hr(),
              
+             # rep range and set type plots
              h3("Training Style"),
              fluidRow(
                column(6, 
@@ -133,12 +134,12 @@ ui <- navbarPage(
            )
   ),
   
-  # ---- TAB 4: WORKOUT HABITS (Updated with Weekly Freq) ----
+  # tab 4: workout habits
   tabPanel("Workout Habits",
            fluidPage(
              br(),
              h3("Consistency"),
-             # NEW: Weekly Frequency
+             
              plotOutput("weekly_frequency_plot", height = "300px"),
              hr(),
              
@@ -164,7 +165,7 @@ ui <- navbarPage(
            )
   ),
   
-  # ---- TAB 5: MUSCLE SPLIT (New Pie Chart) ----
+  # tab 5: muscle split
   tabPanel("Muscle Split",
            fluidPage(
              br(),

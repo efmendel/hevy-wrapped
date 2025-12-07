@@ -6,7 +6,7 @@ library(readr)
 
 server <- function(input, output, session) {
   
-  # ---- DATA PROCESSING ----
+  # process data
   workout_data <- eventReactive(input$analyze, {
     req(input$file)
     data <- read_csv(input$file$datapath, show_col_types = FALSE)
@@ -44,14 +44,14 @@ server <- function(input, output, session) {
       filter(duration_min > 0 & duration_min <= 300)
   })
   
-  # ---- DROPDOWN UI ----
+  # dropdown ui
   output$exercise_select_ui <- renderUI({
     data <- workout_data()
     valid_exercises <- data %>% count(exercise_title) %>% filter(n >= 5) %>% pull(exercise_title) %>% sort()
     selectInput("selected_exercise", "Select Exercise to Visualize:", choices = valid_exercises, selected = valid_exercises[1])
   })
   
-  # ---- SIMPLE TEXT OUTPUTS ----
+  # simple text outputs
   output$total_workouts <- renderText({ paste0("🗓️ ", n_distinct(workout_data()$date), " workouts") })
   output$total_volume <- renderText({ paste0("💪 ", format(round(sum(workout_data()$volume, na.rm = TRUE)), big.mark = ","), " lbs") })
   output$top_exercise <- renderText({ 
@@ -85,7 +85,7 @@ server <- function(input, output, session) {
     paste0("💀 ", rate, "% Sets to Failure")
   })
   
-  # ---- PLOTS: TRENDS & HABITS ----
+  # plots for trends and habits
   
   output$workout_trend <- renderPlot({
     monthly <- workout_data() %>% mutate(month = floor_date(date, "month")) %>% group_by(month) %>% summarise(count = n_distinct(date))
@@ -145,7 +145,7 @@ server <- function(input, output, session) {
       labs(title = "Heaviest Sessions", x = "", y = "1000s lbs") + theme_minimal()
   })
   
-  # ---- PLOTS: STRENGTH & GAINS ----
+  # plots for strengths and gains
   
   output$progression_chart <- renderPlot({
     req(input$selected_exercise)
@@ -155,7 +155,6 @@ server <- function(input, output, session) {
       labs(title = paste("Strength Progress:", input$selected_exercise), y = "Est. 1RM (lbs)", x = "") + theme_minimal()
   })
   
-  # NEW: Custom Scatter (Weight + Reps)
   output$exercise_scatter <- renderPlot({
     req(input$selected_exercise)
     ex_data <- workout_data() %>% filter(exercise_title == input$selected_exercise)
@@ -176,7 +175,6 @@ server <- function(input, output, session) {
       labs(title = "Intensity (Set Types)", x = "", y = "Sets") + theme_minimal() + theme(legend.position = "none")
   })
   
-  # NEW: Most/Least Improved Logic
   improvement_data <- reactive({
     workout_data() %>% mutate(month = floor_date(date, "month")) %>% group_by(exercise_title, month) %>%
       summarise(max_weight = max(weight_lbs, na.rm = TRUE), .groups = "drop") %>%
@@ -200,7 +198,6 @@ server <- function(input, output, session) {
       labs(title = "Top 10 Least Improved", x = "", y = "% Change") + theme_minimal()
   })
   
-  # NEW: Pie Chart Logic
   output$workout_type_pie <- renderPlot({
     types <- workout_data() %>% mutate(type = case_when(
       grepl("Leg|Calf|Squat", exercise_title, ignore.case = TRUE) ~ "Legs",
